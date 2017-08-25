@@ -1,3 +1,7 @@
 machine:
   node:
     version: 8.4.0
+
+dependencies:
+  pre:
+    - npm install -g npm@5.3.0
