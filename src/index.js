@@ -41,7 +41,7 @@ export default class Luxafor {
    * @param   {string}   command Lighting command
    * @param   {number}   speed Speed value 0-255
    * @param   {number}   repeat Repeat value 0-255
-   * @returns {object[]} Three timing bytes
+   * @returns {number[]} Three timing bytes
    */
   getTiming({command, speed, repeat}) {
     const timingBytes = {
