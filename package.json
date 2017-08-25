@@ -8,6 +8,10 @@
     "lint": "eslint --env node src",
     "test": "jest"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mattgoucher/node-luxafor"
+  },
   "license": "MIT",
   "author": {
     "name": "Matt Goucher",
