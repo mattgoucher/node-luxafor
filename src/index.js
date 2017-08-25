@@ -35,16 +35,41 @@ export default class Luxafor {
 
   /**
    * Write to Luxafor
+   * @author Josh Kloster <klosterjosh@gmail.com>
+   * @param   {string} command Lighting command
+   * @param   {number} speed Speed value 0-255
+   * @param   {number} repeat Repeat value 0-255
+   * @returns {array}  Three timing bytes
+   */
+  getTiming({command, speed, repeat}) {
+    const nil = 0;
+    const timingBytes = {
+      color: [nil, nil, nil],
+      fade: [speed, nil, nil],
+      strobe: [speed, nil, repeat],
+      wave: [nil, repeat, speed]
+    };
+
+    return timingBytes[command];
+  }
+
+  /**
+   * Write to Luxafor
    * @author Matt Goucher <matt@mattgoucher.com>
    * @param   {string} command Lighting command
    * @param   {string} side Side to write to
    * @param   {number} r Red value 0-255
    * @param   {number} g Green value 0-255
    * @param   {number} b Blue value 0-255
+   * @param   {number} speed value 0-255
+   * @param   {number} repeat value 0-255
    * @returns {object} Instance
    */
-  write({command, side, r, g, b}) {
-    this.device.write([this.commands[command], this.sides[side], r, g, b]);
+  write({command, side, r, g, b, speed, repeat}) {
+    const baseBytes = [this.commands[command], this.sides[side], r, g, b];
+    const timingBytes = this.getTiming(command, speed, repeat);
+
+    this.device.write([...baseBytes, ...timingBytes]);
     return this;
   }
 
