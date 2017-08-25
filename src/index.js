@@ -17,7 +17,8 @@ export default class Luxafor {
       color: 1,
       fade: 2,
       strobe: 3,
-      wave: 4
+      wave: 4,
+      pattern: 6
     };
 
     // Sides color can be applied
@@ -66,7 +67,7 @@ export default class Luxafor {
    * @param   {number} repeat value 0-255
    * @returns {object} Instance
    */
-  write(command = 'color', side = 'both', r, g, b, speed, repeat) {
+  write({command = 'color', side = 'both', r = 0, g = 0, b = 0, speed, repeat}) {
     const baseBytes = [this.commands[command], this.sides[side], r, g, b];
     const timingBytes = this.getTiming(command, speed, repeat);
 
@@ -79,7 +80,7 @@ export default class Luxafor {
   }
 
   /**
-   * Change the Luxafor's color
+   * Change the Luxafor's color, instantly.
    * @author Matt Goucher <matt@mattgoucher.com>
    * @param   {number} r Red value 0-255
    * @param   {number} g Green value 0-255
@@ -89,12 +90,12 @@ export default class Luxafor {
    * @returns {object} Instance
    */
   setColor(r, g, b, side, command) {
-    this.write(command, side, r, g, b, NIL, NIL);
+    this.write({command, side, r, g, b});
     return this;
   }
 
   /**
-   * Fade to color
+   * Change the Luxafor's color with fade transition
    * @author Matt Goucher <matthew.goucher@concur.com>
    * @param   {number} r Red value 0-255
    * @param   {number} g Green value 0-255
@@ -104,7 +105,7 @@ export default class Luxafor {
    * @returns {object} Instance
    */
   fadeToColor(r, g, b, speed, side = 'both') {
-    this.write('fade', side, r, g, b, speed, NIL);
+    this.write({command: 'fade', side, r, g, b, speed});
     return this;
   }
 }
