@@ -36,14 +36,14 @@ export default class Luxafor {
   }
 
   /**
-   * Write to Luxafor
+   * Get timing bytes for writing
    * @author Josh Kloster <klosterjosh@gmail.com>
-   * @param   {string}   command Lighting command
-   * @param   {number}   speed Speed value 0-255
-   * @param   {number}   repeat Repeat value 0-255
-   * @returns {number[]} Three timing bytes
+   * @param  {string} command Lighting command
+   * @param  {number} speed Speed value 0-255
+   * @param  {number} repeat Repeat value 0-255
+   * @returns {array} Three timing bytes
    */
-  getTiming({command, speed, repeat}) {
+  getTiming(command, speed = 0, repeat = 0) {
     const timingBytes = {
       color: [NIL, NIL, NIL],
       fade: [speed, NIL, NIL],
@@ -62,15 +62,19 @@ export default class Luxafor {
    * @param   {number} r Red value 0-255
    * @param   {number} g Green value 0-255
    * @param   {number} b Blue value 0-255
-   * @param   {number} speed value 0-255
+   * @param   {number} speed How fast or slow to change 0-255
    * @param   {number} repeat value 0-255
    * @returns {object} Instance
    */
-  write({command, side, r, g, b, speed, repeat}) {
+  write(command = 'color', side = 'both', r, g, b, speed, repeat) {
     const baseBytes = [this.commands[command], this.sides[side], r, g, b];
-    const timingBytes = this.getTiming({command, speed, repeat});
+    const timingBytes = this.getTiming(command, speed, repeat);
 
-    this.device.write([...baseBytes, ...timingBytes]);
+    this.device.write([
+      ...baseBytes,
+      ...timingBytes
+    ]);
+
     return this;
   }
 
@@ -84,8 +88,23 @@ export default class Luxafor {
    * @param   {string} command Lighting mode
    * @returns {object} Instance
    */
-  setColor(r, g, b, side = 'both', command = 'color') {
-    this.write({command, side, r, g, b, speed: NIL, repeat: NIL});
+  setColor(r, g, b, side, command) {
+    this.write(command, side, r, g, b, NIL, NIL);
+    return this;
+  }
+
+  /**
+   * Fade to color
+   * @author Matt Goucher <matthew.goucher@concur.com>
+   * @param   {number} r Red value 0-255
+   * @param   {number} g Green value 0-255
+   * @param   {number} b Blue value 0-255
+   * @param   {string} speed How fast or slow to change 0-255
+   * @param   {string} side Side to change
+   * @returns {object} Instance
+   */
+  fadeToColor(r, g, b, speed, side = 'both') {
+    this.write('fade', side, r, g, b, speed, NIL);
     return this;
   }
 }
