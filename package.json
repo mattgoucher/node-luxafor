@@ -1,6 +1,6 @@
 {
   "name": "node-luxafor",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Control your Luxafor light",
   "main": "lib/index.js",
   "scripts": {
