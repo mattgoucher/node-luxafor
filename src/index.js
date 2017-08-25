@@ -63,8 +63,8 @@ export default class Luxafor {
    * @param   {number} r Red value 0-255
    * @param   {number} g Green value 0-255
    * @param   {number} b Blue value 0-255
-   * @param   {number} speed How fast or slow to change 0-255
-   * @param   {number} repeat value 0-255
+   * @param   {number} [speed] How fast or slow to change 0-255
+   * @param   {number} [repeat] value 0-255
    * @returns {object} Instance
    */
   write({command = 'color', side = 'both', r = 0, g = 0, b = 0, speed, repeat}) {
@@ -96,16 +96,49 @@ export default class Luxafor {
 
   /**
    * Change the Luxafor's color with fade transition
-   * @author Matt Goucher <matthew.goucher@concur.com>
+   * @author Matt Goucher <matt@mattgoucher.com>
    * @param   {number} r Red value 0-255
    * @param   {number} g Green value 0-255
    * @param   {number} b Blue value 0-255
-   * @param   {string} speed How fast or slow to change 0-255
-   * @param   {string} side Side to change
+   * @param   {number} [speed] How fast or slow to change 0-255
+   * @param   {string} [side] Side to change
    * @returns {object} Instance
    */
   fadeToColor(r, g, b, speed, side = 'both') {
     this.write({command: 'fade', side, r, g, b, speed});
     return this;
   }
+
+  /**
+   * Strobe a specified color
+   * @author Josh Kloster <klosterjosh@gmail.com>
+   * @param   {number} r Red value 0-255
+   * @param   {number} g Green value 0-255
+   * @param   {number} b Blue value 0-255
+   * @param   {number} [speed] How fast or slow to change 0-255
+   * @param   {number} [repeat] How fast or slow to change 0-255
+   * @param   {string} [side] Side to change
+   * @returns {object} Instance
+   */
+  strobeColor(r, g, b, speed, repeat, side = 'both') {
+    this.write({command: 'strobe', side, r, g, b, speed, repeat});
+    return this;
+  }
+
+  /**
+   * Wave a specified color
+   * @author Josh Kloster <klosterjosh@gmail.com>
+   * @param   {number} r Red value 0-255
+   * @param   {number} g Green value 0-255
+   * @param   {number} b Blue value 0-255
+   * @param   {number} [speed] How fast or slow to change 0-255
+   * @param   {number} [repeat] How fast or slow to change 0-255
+   * @param   {string} [side] Side to change
+   * @returns {object} Instance
+   */
+  waveColor(r, g, b, speed, repeat, side = 'both') {
+    this.write({command: 'wave', side, r, g, b, speed, repeat});
+    return this;
+  }
+
 }
