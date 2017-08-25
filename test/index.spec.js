@@ -23,12 +23,43 @@ describe('Luxafor', () => {
     ).toMatchSnapshot();
   });
 
+  describe('getTiming', () => {
+    it('Should return the proper timing bytes', () => {
+      const instance = setup();
+      const commands = Object.keys(instance.commands);
+      const timingBytes = {
+        color: [0, 0, 0],
+        fade: [1, 0, 0],
+        strobe: [1, 0, 2],
+        wave: [0, 2, 1]
+      };
+
+      commands.forEach(command => {
+        expect(
+          instance.getTiming({
+            command,
+            speed: 1,
+            repeat: 2
+          })
+        ).toEqual(timingBytes[command]);
+      });
+    });
+  });
+
   describe('write', () => {
     it('Should return the instance', () => {
       const instance = setup();
 
       expect(
-        instance.write({})
+        instance.write({
+          command: 'strobe',
+          side: 'front',
+          r: 255,
+          g: 254,
+          b: 253,
+          speed: 252,
+          repeat: 251
+        })
       ).toMatchObject(instance);
     });
 
@@ -41,7 +72,9 @@ describe('Luxafor', () => {
           side: 'front',
           r: 255,
           g: 254,
-          b: 253
+          b: 253,
+          speed: 252,
+          repeat: 251
         })
       ).toMatchSnapshot();
     });
@@ -52,7 +85,7 @@ describe('Luxafor', () => {
       const instance = setup();
 
       expect(
-        instance.write({})
+        instance.setColor(255, 254, 253)
       ).toMatchObject(instance);
     });
 

@@ -1,5 +1,7 @@
 import {HID} from 'node-hid';
 
+const NIL = 0x00;
+
 /**
  * Luxafor
  * @type {object}
@@ -42,12 +44,11 @@ export default class Luxafor {
    * @returns {object[]} Three timing bytes
    */
   getTiming({command, speed, repeat}) {
-    const nil = 0;
     const timingBytes = {
-      color: [nil, nil, nil],
-      fade: [speed, nil, nil],
-      strobe: [speed, nil, repeat],
-      wave: [nil, repeat, speed]
+      color: [NIL, NIL, NIL],
+      fade: [speed, NIL, NIL],
+      strobe: [speed, NIL, repeat],
+      wave: [NIL, repeat, speed]
     };
 
     return timingBytes[command];
@@ -84,8 +85,7 @@ export default class Luxafor {
    * @returns {object} Instance
    */
   setColor(r, g, b, side = 'both', command = 'color') {
-    this.write({command, side, r, g, b});
+    this.write({command, side, r, g, b, speed: NIL, repeat: NIL});
     return this;
   }
-
 }
