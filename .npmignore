@@ -5,3 +5,4 @@ src
 .eslintrc
 test
 __mocks__
+circle.yml
