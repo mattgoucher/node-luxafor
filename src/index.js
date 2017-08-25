@@ -25,16 +25,41 @@ export default class Luxafor {
       front: 0x41
     };
 
+    this.patterns = {
+      police: 5
+    };
+
     // Grab device
     this.device = new HID(vid, pid);
   }
 
+  /**
+   * Write to Luxafor
+   * @author Matt Goucher <matthew.goucher@concur.com>
+   * @param   {string} command Lighting command
+   * @param   {string} side Side to write to
+   * @param   {number} r Red value 0-255
+   * @param   {number} g Green value 0-255
+   * @param   {number} b Blue value 0-255
+   * @returns {object} Instance
+   */
   write({command, side, r, g, b}) {
-    this.device.write([this.commands[command], this.sides[side], r, g, b])
+    this.device.write([this.commands[command], this.sides[side], r, g, b]);
+    return this;
   }
 
-  setColor(r, g, b, side = 'both') {
-    this.write({command: 'color', side, r, g, b});
+  /**
+   * Change the Luxafor's color
+   * @author Matt Goucher <matthew.goucher@concur.com>
+   * @param   {number} r Red value 0-255
+   * @param   {number} g Green value 0-255
+   * @param   {number} b Blue value 0-255
+   * @param   {string} side Side to change
+   * @param   {string} command Lighting mode
+   * @returns {object} Instance
+   */
+  setColor(r, g, b, side = 'both', command = 'color') {
+    this.write({command, side, r, g, b});
     return this;
   }
 

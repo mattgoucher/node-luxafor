@@ -1,3 +1,5 @@
 src
 .babelrc
 .gitignore
+.editorconfig
+.eslintrc
