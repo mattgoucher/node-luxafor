@@ -35,7 +35,7 @@ export default class Luxafor {
 
   /**
    * Write to Luxafor
-   * @author Matt Goucher <matthew.goucher@concur.com>
+   * @author Matt Goucher <matt@mattgoucher.com>
    * @param   {string} command Lighting command
    * @param   {string} side Side to write to
    * @param   {number} r Red value 0-255
@@ -50,7 +50,7 @@ export default class Luxafor {
 
   /**
    * Change the Luxafor's color
-   * @author Matt Goucher <matthew.goucher@concur.com>
+   * @author Matt Goucher <matt@mattgoucher.com>
    * @param   {number} r Red value 0-255
    * @param   {number} g Green value 0-255
    * @param   {number} b Blue value 0-255
