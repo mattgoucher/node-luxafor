@@ -1,7 +1,7 @@
 # node-luxafor
 Control your Luxafor light
 
-[![CircleCI](https://circleci.com/gh/mattgoucher/node-luxafor/tree/master.svg?style=shield)](https://circleci.com/gh/mattgoucher/node-luxafor/tree/master)
+[![CircleCI](https://circleci.com/gh/mattgoucher/node-luxafor/tree/master.svg?style=shield)](https://circleci.com/gh/mattgoucher/node-luxafor/tree/master) [![Coverage Status](https://coveralls.io/repos/github/mattgoucher/node-luxafor/badge.svg?branch=master)](https://coveralls.io/github/mattgoucher/node-luxafor?branch=master)
 
 
 ```js
