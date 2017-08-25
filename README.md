@@ -23,7 +23,7 @@ const MyLight = new Luxafor();
 MyLight.setColor(0, 0, 255, 'back');
 
 // Set the front-side to green
-MyLight.setColor(0, 255, 0, 'green');
+MyLight.setColor(0, 255, 0, 'front');
 ```
 
 ## License
