@@ -1,6 +1,9 @@
 # node-luxafor
 Control your Luxafor light
 
+[![CircleCI](https://circleci.com/gh/mattgoucher/node-luxafor/tree/master.svg?style=shield)](https://circleci.com/gh/mattgoucher/node-luxafor/tree/master)
+
+
 ```js
 import Luxafor from 'node-luxafor';
 
