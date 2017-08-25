@@ -6,3 +6,7 @@ dependencies:
   pre:
     - sudo apt install libusb-1.0-0 libusb-1.0-0-dev
     - npm install -g npm@5.3.0
+
+test:
+  post:
+    - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js 
