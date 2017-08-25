@@ -123,4 +123,21 @@ export default class Luxafor {
     this.write('strobe', side, r, g, b, speed, repeat);
     return this;
   }
+
+  /**
+   * Wave a specified color
+   * @author Josh Kloster <klosterjosh@gmail.com>
+   * @param   {number} r Red value 0-255
+   * @param   {number} g Green value 0-255
+   * @param   {number} b Blue value 0-255
+   * @param   {number} [speed] How fast or slow to change 0-255
+   * @param   {number} [repeat] How fast or slow to change 0-255
+   * @param   {string} [side] Side to change
+   * @returns {object} Instance
+   */
+  waveColor(r, g, b, speed, repeat, side = 'both') {
+    this.write('wave', side, r, g, b, speed, repeat);
+    return this;
+  }
+
 }
