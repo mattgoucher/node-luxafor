@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Luxafor Should expose commands 1`] = `
+Object {
+  "color": 1,
+  "fade": 2,
+  "strobe": 3,
+  "wave": 4,
+}
+`;
+
+exports[`Luxafor Should use default pid and vid 1`] = `
+Object {
+  "pid": 62322,
+  "vid": 1240,
+}
+`;
+
+exports[`Luxafor setColor Write args 1`] = `
+Luxafor {
+  "commands": Object {
+    "color": 1,
+    "fade": 2,
+    "strobe": 3,
+    "wave": 4,
+  },
+  "device": Object {
+    "write": [Function],
+  },
+  "patterns": Object {
+    "police": 5,
+  },
+  "pid": 62322,
+  "sides": Object {
+    "back": 66,
+    "both": 255,
+    "front": 65,
+  },
+  "vid": 1240,
+}
+`;
+
+exports[`Luxafor write Should write to the device 1`] = `
+Luxafor {
+  "commands": Object {
+    "color": 1,
+    "fade": 2,
+    "strobe": 3,
+    "wave": 4,
+  },
+  "device": Object {
+    "write": [Function],
+  },
+  "patterns": Object {
+    "police": 5,
+  },
+  "pid": 62322,
+  "sides": Object {
+    "back": 66,
+    "both": 255,
+    "front": 65,
+  },
+  "vid": 1240,
+}
+`;

@@ -3,3 +3,5 @@ src
 .gitignore
 .editorconfig
 .eslintrc
+test
+__mocks__

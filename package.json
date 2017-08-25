@@ -6,7 +6,7 @@
   "scripts": {
     "build": "babel src -d lib",
     "lint": "eslint --env node src",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "license": "MIT",
   "author": {
@@ -21,7 +21,8 @@
     "babel-preset-stage-0": "^6.24.1",
     "eslint": "^4.5.0",
     "eslint-config-airbnb": "^15.1.0",
-    "eslint-plugin-import": "^2.7.0"
+    "eslint-plugin-import": "^2.7.0",
+    "jest": "^20.0.4"
   },
   "dependencies": {
     "node-hid": "^0.5.7"
