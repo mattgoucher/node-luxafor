@@ -60,7 +60,7 @@ describe('Luxafor', () => {
       const instance = setup();
 
       expect(
-        instance.setColor(255, 254, 253, 'both', 'fade')
+        instance.setColor(255, 254, 253)
       ).toMatchSnapshot();
     });
   });
