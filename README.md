@@ -4,6 +4,12 @@ Control your Luxafor light
 ```js
 import Luxafor from 'node-luxafor';
 
+// Initialize your light
 const MyLight = new Luxafor();
-MyLight.setColor(0, 255, 255);
+
+// Set the back-side to blue
+MyLight.setColor(0, 0, 255, 'back');
+
+// Set the front-side to green
+MyLight.setColor(0, 255, 0, 'green');
 ```
