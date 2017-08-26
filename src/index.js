@@ -42,6 +42,9 @@ export default class Luxafor {
     // Data that will be passed to write on exec
     this.data = {};
 
+    // Led positions to write to
+    this.ledPositions = [];
+
     // Grab device
     this.device = new HID(vid, pid);
   }
@@ -96,8 +99,16 @@ export default class Luxafor {
    * @returns {object} Instance
    */
   exec() {
-    this.write(this.data);
+    if (this.ledPositions.length > 0) {
+      this.ledPositions.forEach(led => {
+        this.write(Object.assign(this.data, {position: led}));
+      });
+    } else {
+      this.write(Object.assign(this.data));
+    }
+
     this.data = {};
+    this.ledPositions = [];
     return this;
   }
 
@@ -140,10 +151,21 @@ export default class Luxafor {
    * Set Luxafor led position
    * @author Josh Kloster <klosterjosh@gmail.com>
    * @param  {string|number} position Specific LED 1-6 or named section
-   * @return {object} Instance
+   * @return {object}        Instance
    */
   led(position) {
     this.data.position = position;
+    return this;
+  }
+
+  /**
+   * Set multiple Luxafor led positions
+   * @author Josh Kloster <klosterjosh@gmail.com>
+   * @param  {array}  positions Specific LED positions 1-6 or named section
+   * @return {object} Instance
+   */
+  leds(positions) {
+    this.ledPositions = positions;
     return this;
   }
 
