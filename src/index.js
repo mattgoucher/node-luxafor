@@ -1,4 +1,5 @@
 import {HID} from 'node-hid';
+import colorMap from './colorMap';
 
 const NIL = 0x00;
 
@@ -70,7 +71,6 @@ export default class Luxafor {
   write({command = 'color', side = 'both', r = 0, g = 0, b = 0, speed, repeat}) {
     const baseBytes = [this.commands[command], this.sides[side], r, g, b];
     const timingBytes = this.getTiming(command, speed, repeat);
-
     this.device.write([
       ...baseBytes,
       ...timingBytes
@@ -89,8 +89,9 @@ export default class Luxafor {
    * @param   {string} command Lighting mode
    * @returns {object} Instance
    */
-  setColor(r, g, b, side, command) {
-    this.write({command, side, r, g, b});
+  setColor(color, side, command) {
+    const rgb = colorMap[color.toLowerCase()];
+    this.write({command, side, r: rgb.r, g: rgb.g, b: rgb.b});
     return this;
   }
 
