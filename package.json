@@ -18,10 +18,16 @@
     "email": "matt@mattgoucher.com",
     "url": "https://github.com/mattgoucher"
   },
+  "contributors": {
+    "name": "Josh Kloster",
+    "email": "klosterjosh@gmail.com",
+    "url": "https://github.com/joshkloster"
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-es2015": "^6.24.1",
+    "babel-preset-minify": "^0.2.0",
     "babel-preset-stage-0": "^6.24.1",
     "coveralls": "^2.13.1",
     "eslint": "^4.5.0",
