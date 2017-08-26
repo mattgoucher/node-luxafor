@@ -22,16 +22,25 @@ export default class Luxafor {
       pattern: 6
     };
 
-    // Sides color can be applied
-    this.sides = {
+    // Position colors can be applied
+    this.positions = {
       both: 0xff,
       back: 0x42,
-      front: 0x41
+      front: 0x41,
+      1: 1,
+      2: 2,
+      3: 3,
+      4: 4,
+      5: 5,
+      6: 6
     };
 
     this.patterns = {
       police: 5
     };
+
+    // Data that will be passed to write on exec
+    this.data = {};
 
     // Grab device
     this.device = new HID(vid, pid);
@@ -41,8 +50,8 @@ export default class Luxafor {
    * Get timing bytes for writing
    * @author Josh Kloster <klosterjosh@gmail.com>
    * @param  {string} command Lighting command
-   * @param  {number} speed Speed value 0-255
-   * @param  {number} repeat Repeat value 0-255
+   * @param  {number} [speed] Speed value 0-255
+   * @param  {number} [repeat] Repeat value 0-255
    * @returns {array} Three timing bytes
    */
   getTiming(command, speed = 0, repeat = 0) {
@@ -50,7 +59,8 @@ export default class Luxafor {
       color: [NIL, NIL, NIL],
       fade: [speed, NIL, NIL],
       strobe: [speed, NIL, repeat],
-      wave: [NIL, repeat, speed]
+      wave: [NIL, repeat, speed],
+      pattern: [NIL, NIL, NIL]
     };
 
     return timingBytes[command];
@@ -59,17 +69,18 @@ export default class Luxafor {
   /**
    * Write to Luxafor
    * @author Matt Goucher <matt@mattgoucher.com>
-   * @param   {string} command Lighting command
-   * @param   {string} side Side to write to
-   * @param   {number} r Red value 0-255
-   * @param   {number} g Green value 0-255
-   * @param   {number} b Blue value 0-255
+   * @param   {string} [command] Lighting command
+   * @param   {string} [position] Position to write to
+   * @param   {number} [r] Red value 0-255
+   * @param   {number} [g] Green value 0-255
+   * @param   {number} [b] Blue value 0-255
    * @param   {number} [speed] How fast or slow to change 0-255
    * @param   {number} [repeat] value 0-255
    * @returns {object} Instance
    */
-  write({command = 'color', side = 'both', r = 0, g = 0, b = 0, speed, repeat}) {
-    const baseBytes = [this.commands[command], this.sides[side], r, g, b];
+  write({command = 'color', position = 'both', r = 0, g = 0, b = 0, pattern, speed, repeat}) {
+    const secondByte = this.patterns[pattern] || this.positions[position];
+    const baseBytes = [this.commands[command], secondByte, r, g, b];
     const timingBytes = this.getTiming(command, speed, repeat);
     this.device.write([
       ...baseBytes,
@@ -80,66 +91,71 @@ export default class Luxafor {
   }
 
   /**
-   * Change the Luxafor's color, instantly.
-   * @author Matt Goucher <matt@mattgoucher.com>
-   * @param   {number} r Red value 0-255
-   * @param   {number} g Green value 0-255
-   * @param   {number} b Blue value 0-255
-   * @param   {string} side Side to change
-   * @param   {string} command Lighting mode
-   * @returns {object} Instance
-   */
-  setColor(color, side, command) {
-    const rgb = colorMap[color.toLowerCase()];
-    this.write({command, side, r: rgb.r, g: rgb.g, b: rgb.b});
-    return this;
-  }
-
-  /**
-   * Change the Luxafor's color with fade transition
-   * @author Matt Goucher <matt@mattgoucher.com>
-   * @param   {number} r Red value 0-255
-   * @param   {number} g Green value 0-255
-   * @param   {number} b Blue value 0-255
-   * @param   {number} [speed] How fast or slow to change 0-255
-   * @param   {string} [side] Side to change
-   * @returns {object} Instance
-   */
-  fadeToColor(r, g, b, speed, side = 'both') {
-    this.write({command: 'fade', side, r, g, b, speed});
-    return this;
-  }
-
-  /**
-   * Strobe a specified color
+   * Write stored data to Luxafor
    * @author Josh Kloster <klosterjosh@gmail.com>
-   * @param   {number} r Red value 0-255
-   * @param   {number} g Green value 0-255
-   * @param   {number} b Blue value 0-255
-   * @param   {number} [speed] How fast or slow to change 0-255
-   * @param   {number} [repeat] How fast or slow to change 0-255
-   * @param   {string} [side] Side to change
    * @returns {object} Instance
    */
-  strobeColor(r, g, b, speed, repeat, side = 'both') {
-    this.write({command: 'strobe', side, r, g, b, speed, repeat});
+  exec() {
+    this.write(this.data);
+    this.data = {};
     return this;
   }
 
   /**
-   * Wave a specified color
+   * Set Luxafor command mode
    * @author Josh Kloster <klosterjosh@gmail.com>
-   * @param   {number} r Red value 0-255
-   * @param   {number} g Green value 0-255
-   * @param   {number} b Blue value 0-255
-   * @param   {number} [speed] How fast or slow to change 0-255
-   * @param   {number} [repeat] How fast or slow to change 0-255
-   * @param   {string} [side] Side to change
+   * @param   {string} cmd Lighting command
    * @returns {object} Instance
    */
-  waveColor(r, g, b, speed, repeat, side = 'both') {
-    this.write({command: 'wave', side, r, g, b, speed, repeat});
+  command(cmd) {
+    this.data.command = cmd;
     return this;
   }
 
+  /**
+   * Set Luxafor color via rgb
+   * @author Josh Kloster <klosterjosh@gmail.com>
+   * @param  {number} r Red value 0-255
+   * @param  {number} g Green value 0-255
+   * @param  {number} b Blue value 0-255
+   * @return {object} Instance
+   */
+  color(r, g, b) {
+    Object.assign(this.data, {r, g, b});
+    return this;
+  }
+
+  /**
+   * Set Luxafor color via html color names
+   * @author Josh Kloster <klosterjosh@gmail.com>
+   * @param  {string} color HTML color name
+   * @return {object} Instance
+   */
+  colorName(color) {
+    Object.assign(this.data, colorMap[color]);
+    return this;
+  }
+
+  /**
+   * Set Luxafor led position
+   * @author Josh Kloster <klosterjosh@gmail.com>
+   * @param  {string|number} position Specific LED 1-6 or named section
+   * @return {object} Instance
+   */
+  led(position) {
+    this.data.position = position;
+    return this;
+  }
+
+  /**
+   * Set Luxafor pattern
+   * @author Josh Kloster <klosterjosh@gmail.com>
+   * @param  {string} name Name of pattern
+   * @return {object} Instance
+   */
+  pattern(name) {
+    this.data.pattern = name;
+    this.data.command = 'pattern';
+    return this;
+  }
 }
