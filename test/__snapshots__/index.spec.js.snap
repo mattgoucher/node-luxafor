@@ -1,65 +1,173 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Luxafor Should expose commands 1`] = `
+exports[`Luxafor color Should set rgb values by default 1`] = `
 Object {
-  "color": 1,
-  "fade": 2,
-  "strobe": 3,
-  "wave": 4,
+  "b": 100,
+  "g": 50,
+  "r": 25,
 }
 `;
 
-exports[`Luxafor Should use default pid and vid 1`] = `
+exports[`Luxafor color Should set the lights off by default 1`] = `
 Object {
-  "pid": 62322,
-  "vid": 1240,
+  "b": 0,
+  "g": 0,
+  "r": 0,
 }
 `;
 
-exports[`Luxafor setColor Write args 1`] = `
-Luxafor {
-  "commands": Object {
-    "color": 1,
-    "fade": 2,
-    "strobe": 3,
-    "wave": 4,
-  },
-  "device": Object {
-    "write": [Function],
-  },
-  "patterns": Object {
-    "police": 5,
-  },
-  "pid": 62322,
-  "sides": Object {
-    "back": 66,
-    "both": 255,
-    "front": 65,
-  },
-  "vid": 1240,
+exports[`Luxafor colorName Should grab RGB values from colormap 1`] = `
+Object {
+  "b": 0,
+  "g": 0,
+  "r": 255,
 }
 `;
 
-exports[`Luxafor write Should write to the device 1`] = `
-Luxafor {
-  "commands": Object {
-    "color": 1,
-    "fade": 2,
-    "strobe": 3,
-    "wave": 4,
-  },
-  "device": Object {
-    "write": [Function],
-  },
-  "patterns": Object {
-    "police": 5,
-  },
-  "pid": 62322,
-  "sides": Object {
-    "back": 66,
-    "both": 255,
-    "front": 65,
-  },
-  "vid": 1240,
-}
+exports[`Luxafor exec Should execute the write for only many led positions 1`] = `
+Array [
+  Array [
+    1,
+    1,
+    0,
+    255,
+    0,
+    0,
+    0,
+    0,
+  ],
+  Array [
+    1,
+    2,
+    0,
+    255,
+    0,
+    0,
+    0,
+    0,
+  ],
+]
+`;
+
+exports[`Luxafor exec Should execute the write for only one led position 1`] = `
+Array [
+  Array [
+    1,
+    255,
+    0,
+    255,
+    0,
+    0,
+    0,
+    0,
+  ],
+]
+`;
+
+exports[`Luxafor getTiming Should pass 0's by default 1`] = `
+Array [
+  0,
+  0,
+  0,
+]
+`;
+
+exports[`Luxafor getTiming Should return timing values for color 1`] = `
+Array [
+  0,
+  0,
+  0,
+]
+`;
+
+exports[`Luxafor getTiming Should return timing values for fade 1`] = `
+Array [
+  25,
+  0,
+  0,
+]
+`;
+
+exports[`Luxafor getTiming Should return timing values for pattern 1`] = `
+Array [
+  0,
+  0,
+  0,
+]
+`;
+
+exports[`Luxafor getTiming Should return timing values for strobe 1`] = `
+Array [
+  25,
+  0,
+  40,
+]
+`;
+
+exports[`Luxafor getTiming Should return timing values for wave 1`] = `
+Array [
+  0,
+  40,
+  25,
+]
+`;
+
+exports[`Luxafor write Should turn off the light by default 1`] = `
+Array [
+  Array [
+    1,
+    255,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+  ],
+]
+`;
+
+exports[`Luxafor write Should write bytes for a basic color change 1`] = `
+Array [
+  Array [
+    1,
+    255,
+    200,
+    200,
+    200,
+    0,
+    0,
+    0,
+  ],
+]
+`;
+
+exports[`Luxafor write Should write bytes for a fade to color 1`] = `
+Array [
+  Array [
+    2,
+    255,
+    200,
+    200,
+    200,
+    0,
+    0,
+    0,
+  ],
+]
+`;
+
+exports[`Luxafor write Should write bytes for a pattern 1`] = `
+Array [
+  Array [
+    1,
+    5,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+  ],
+]
 `;

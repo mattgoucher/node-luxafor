@@ -89,6 +89,7 @@ export default class Luxafor {
    * @param   {number} [speed] How fast or slow to change 0-255
    * @param   {number} [repeat] value 0-255
    * @returns {object} Instance
+   * TODO: Should pattern clear out command byte?
    */
   write({command = 'color', position = 'both', r = 0, g = 0, b = 0, pattern, speed, repeat}) {
     const secondByte = this.patterns[pattern] || this.positions[position];

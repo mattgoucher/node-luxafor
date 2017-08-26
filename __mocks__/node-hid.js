@@ -1,7 +1,17 @@
 export default {
-  HID: () => {
-    return {
-      write: (args) => ({...args})
+  HID: class HID {
+    constructor() {
+      this.data = [];
+    }
+
+    write(payload) {
+      this.data.push(payload);
+      return this;
+    }
+
+    reset() {
+      this.data = [];
+      return this;
     }
   }
 };
