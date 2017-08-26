@@ -50,8 +50,18 @@ export default class Luxafor {
   }
 
   /**
+   * Reset the data for the instance
+   * @returns {object} Instance
+   */
+  reset() {
+    this.data = {};
+    this.ledPositions = [];
+
+    return this;
+  }
+
+  /**
    * Get timing bytes for writing
-   * @author Josh Kloster <klosterjosh@gmail.com>
    * @param  {string} command Lighting command
    * @param  {number} [speed] Speed value 0-255
    * @param  {number} [repeat] Repeat value 0-255
@@ -71,7 +81,6 @@ export default class Luxafor {
 
   /**
    * Write to Luxafor
-   * @author Matt Goucher <matt@mattgoucher.com>
    * @param   {string} [command] Lighting command
    * @param   {string} [position] Position to write to
    * @param   {number} [r] Red value 0-255
@@ -85,6 +94,7 @@ export default class Luxafor {
     const secondByte = this.patterns[pattern] || this.positions[position];
     const baseBytes = [this.commands[command], secondByte, r, g, b];
     const timingBytes = this.getTiming(command, speed, repeat);
+
     this.device.write([
       ...baseBytes,
       ...timingBytes
@@ -95,28 +105,33 @@ export default class Luxafor {
 
   /**
    * Write stored data to Luxafor
-   * @author Josh Kloster <klosterjosh@gmail.com>
    * @returns {object} Instance
    */
   exec() {
-    if (this.ledPositions.length > 0) {
-      this.ledPositions.forEach(led => {
-        this.write(Object.assign(this.data, {position: led}));
-      });
-    } else {
-      this.write(Object.assign(this.data));
+
+    // Execute a single command
+    if (!this.ledPositions.length) {
+      return this
+        .write(this.data)
+        .reset();
     }
 
-    this.data = {};
-    this.ledPositions = [];
-    return this;
+    // Execute for each LED
+    this.ledPositions.forEach(led =>
+      this.write({
+        ...this.data,
+        position: led
+      })
+    );
+
+    return this.reset();
   }
 
   /**
    * Set Luxafor command mode
-   * @author Josh Kloster <klosterjosh@gmail.com>
    * @param   {string} cmd Lighting command
    * @returns {object} Instance
+   * TODO: Validate commands?
    */
   command(cmd) {
     this.data.command = cmd;
@@ -125,20 +140,18 @@ export default class Luxafor {
 
   /**
    * Set Luxafor color via rgb
-   * @author Josh Kloster <klosterjosh@gmail.com>
    * @param  {number} r Red value 0-255
    * @param  {number} g Green value 0-255
    * @param  {number} b Blue value 0-255
    * @return {object} Instance
    */
-  color(r, g, b) {
+  color(r = 0, g = 0, b = 0) {
     Object.assign(this.data, {r, g, b});
     return this;
   }
 
   /**
    * Set Luxafor color via html color names
-   * @author Josh Kloster <klosterjosh@gmail.com>
    * @param  {string} color HTML color name
    * @return {object} Instance
    */
@@ -149,7 +162,6 @@ export default class Luxafor {
 
   /**
    * Set Luxafor led position
-   * @author Josh Kloster <klosterjosh@gmail.com>
    * @param  {string|number} position Specific LED 1-6 or named section
    * @return {object}        Instance
    */
@@ -160,9 +172,9 @@ export default class Luxafor {
 
   /**
    * Set multiple Luxafor led positions
-   * @author Josh Kloster <klosterjosh@gmail.com>
    * @param  {array}  positions Specific LED positions 1-6 or named section
    * @return {object} Instance
+   * TODO: Validate LED positions exist?
    */
   leds(positions) {
     this.ledPositions = positions;
@@ -171,7 +183,6 @@ export default class Luxafor {
 
   /**
    * Set Luxafor pattern
-   * @author Josh Kloster <klosterjosh@gmail.com>
    * @param  {string} name Name of pattern
    * @return {object} Instance
    */

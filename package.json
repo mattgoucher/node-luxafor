@@ -18,6 +18,11 @@
     "email": "matt@mattgoucher.com",
     "url": "https://github.com/mattgoucher"
   },
+  "contributors": {
+    "name": "Josh Kloster",
+    "email": "klosterjosh@gmail.com",
+    "url": "https://github.com/joshkloster"
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-add-module-exports": "^0.2.1",
