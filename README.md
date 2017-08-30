@@ -21,10 +21,17 @@ import Luxafor from 'node-luxafor';
 const MyLight = new Luxafor();
 ```
 
-**Set the entire light to blue**
+**Set Luxafor to blue**
 ```js
 MyLight
   .color(0, 0, 255)
+  .exec()
+```
+
+**Fade Luxafor to Cyan**
+```js
+MyLight
+  .fade(0, 255, 255)
   .exec()
 ```
 

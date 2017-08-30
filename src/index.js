@@ -152,6 +152,19 @@ export default class Luxafor {
   }
 
   /**
+   * Fade to a color
+   * @param  {number} r Red value 0-255
+   * @param  {number} g Green value 0-255
+   * @param  {number} b Blue value 0-255
+   * @param  {number} speed Speed to fade 0-255 (fast -> slow)
+   * @return {object} Instance
+   */
+  fade(r = 0, g = 0, b = 0, speed = 100) {
+    Object.assign(this.data, {r, g, b, speed, command: 'fade'});
+    return this;
+  }
+
+  /**
    * Set Luxafor color via html color names
    * @param  {string} color HTML color name
    * @return {object} Instance
