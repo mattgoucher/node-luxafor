@@ -64,6 +64,26 @@ Array [
 ]
 `;
 
+exports[`Luxafor fade Should fade to 0 by default 1`] = `
+Object {
+  "b": 0,
+  "command": "fade",
+  "g": 0,
+  "r": 0,
+  "speed": 100,
+}
+`;
+
+exports[`Luxafor fade Should set the rgb, and the fade duration 1`] = `
+Object {
+  "b": 100,
+  "command": "fade",
+  "g": 50,
+  "r": 25,
+  "speed": 200,
+}
+`;
+
 exports[`Luxafor getTiming Should pass 0's by default 1`] = `
 Array [
   0,

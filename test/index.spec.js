@@ -135,6 +135,26 @@ describe('Luxafor', () => {
     });
   });
 
+  describe('fade', () => {
+    it('Should fade to 0 by default', () => {
+      const instance = setup()
+        .fade();
+
+      expect(
+        instance.data
+      ).toMatchSnapshot();
+    });
+
+    it('Should set the rgb, and the fade duration', () => {
+      const instance = setup()
+        .fade(25, 50, 100, 200);
+
+      expect(
+        instance.data
+      ).toMatchSnapshot();
+    });
+  });
+
   describe('colorName', () => {
     it('Should grab RGB values from colormap', () => {
       const instance = setup()
