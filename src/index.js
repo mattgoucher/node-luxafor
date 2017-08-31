@@ -4,6 +4,19 @@ import colorMap from './colorMap';
 const NIL = 0x00;
 
 /**
+ * Check if array contains valid (0-255) input
+ * @param  {array} nums Array of values
+ * @returns {bool} True if any values in array are invalid
+ */
+function invalidNums(nums) {
+  const invalid = nums.find(num => {
+    return !Number.isInteger(num) || num < 0 || num > 255;
+  });
+
+  return invalid;
+}
+
+/**
  * Luxafor
  * @type {object}
  */
@@ -109,15 +122,6 @@ export default class Luxafor {
    * @returns {object} Instance
    */
   exec() {
-
-    // Execute a single command
-    if (!this.ledPositions.length) {
-      return this
-        .write(this.data)
-        .reset();
-    }
-
-    // Execute for each LED
     this.ledPositions.forEach(led =>
       this.write({
         ...this.data,
@@ -132,9 +136,12 @@ export default class Luxafor {
    * Set Luxafor command mode
    * @param   {string} cmd Lighting command
    * @returns {object} Instance
-   * TODO: Validate commands?
    */
   command(cmd) {
+    if (!this.commands[cmd]) {
+      throw new Error(`Specified command: ${cmd} is invalid`);
+    }
+
     this.data.command = cmd;
     return this;
   }
@@ -147,6 +154,10 @@ export default class Luxafor {
    * @return {object} Instance
    */
   color(r = 0, g = 0, b = 0) {
+    if (invalidNums([...arguments])) {
+      throw new Error(`Specified values: ${[...arguments]} are invalid`);
+    }
+
     Object.assign(this.data, {r, g, b});
     return this;
   }
@@ -160,6 +171,10 @@ export default class Luxafor {
    * @return {object} Instance
    */
   fade(r = 0, g = 0, b = 0, speed = 100) {
+    if (invalidNums([...arguments])) {
+      throw new Error(`Specified values: ${[...arguments]} are invalid`);
+    }
+
     Object.assign(this.data, {r, g, b, speed, command: 'fade'});
     return this;
   }
@@ -170,6 +185,10 @@ export default class Luxafor {
    * @return {object} Instance
    */
   colorName(color) {
+    if (!colorMap[color]) {
+      throw new Error(`Specified colorName: ${color} is invalid`);
+    }
+
     Object.assign(this.data, colorMap[color]);
     return this;
   }
@@ -180,7 +199,11 @@ export default class Luxafor {
    * @return {object}        Instance
    */
   led(position) {
-    this.data.position = position;
+    if (!this.positions[position]) {
+      throw new Error(`Specified led: ${position} is invalid`);
+    }
+
+    this.ledPositions.push(position);
     return this;
   }
 
@@ -188,10 +211,16 @@ export default class Luxafor {
    * Set multiple Luxafor led positions
    * @param  {array}  positions Specific LED positions 1-6 or named section
    * @return {object} Instance
-   * TODO: Validate LED positions exist?
    */
   leds(positions) {
-    this.ledPositions = positions;
+    if (!Array.isArray(positions)) {
+      throw new Error(`Specified leds: ${positions} must be an Array`);
+    }
+
+    positions.forEach(position => {
+      this.led(position);
+    });
+
     return this;
   }
 
@@ -201,6 +230,10 @@ export default class Luxafor {
    * @return {object} Instance
    */
   pattern(name) {
+    if (!this.patterns[name]) {
+      throw new Error(`Specified pattern: ${name} is invalid`);
+    }
+
     this.data.pattern = name;
     this.data.command = 'pattern';
     return this;

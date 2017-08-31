@@ -107,11 +107,19 @@ describe('Luxafor', () => {
   describe('command', () => {
     it('Should pass through the command value', () => {
       const instance = setup()
-        .command('fugazi');
+        .command('color');
 
       expect(
         instance.data.command
-      ).toEqual('fugazi');
+      ).toEqual('color');
+    });
+
+    it('Should throw on invalid command', () => {
+      const instance = setup();
+
+      expect(() => {
+        instance.command('foo');
+      }).toThrow('Specified command: foo is invalid');
     });
   });
 
@@ -133,6 +141,14 @@ describe('Luxafor', () => {
         instance.data
       ).toMatchSnapshot();
     });
+
+    it('Should throw on invalid colors', () => {
+      const instance = setup();
+
+      expect(() => {
+        instance.color(-1, 3, 256);
+      }).toThrow('Specified values: -1,3,256 are invalid');
+    });
   });
 
   describe('fade', () => {
@@ -153,6 +169,14 @@ describe('Luxafor', () => {
         instance.data
       ).toMatchSnapshot();
     });
+
+    it('Should throw on invalid colors/speed', () => {
+      const instance = setup();
+
+      expect(() => {
+        instance.fade(1, 1, 1, 'foo');
+      }).toThrow('Specified values: 1,1,1,foo are invalid');
+    });
   });
 
   describe('colorName', () => {
@@ -164,44 +188,93 @@ describe('Luxafor', () => {
         instance.data
       ).toMatchSnapshot();
     });
+
+    it('Should throw on invalid colorName', () => {
+      const instance = setup();
+
+      expect(() => {
+        instance.colorName('foo');
+      }).toThrow('Specified colorName: foo is invalid');
+    });
   });
 
   describe('led', () => {
     it('Should set the led positions', () => {
       const instance = setup()
-        .led(0x41);
+        .led(1);
 
       expect(
-        instance.data.position
-      ).toEqual(0x41);
+        instance.ledPositions
+      ).toEqual([1]);
+    });
+
+    it('Should throw on invalid led position', () => {
+      const instance = setup();
+      const invalid = [-1, 7, 'test'];
+
+      invalid.forEach(val => {
+        expect(() => {
+          instance.led(val);
+        }).toThrow(`Specified led: ${val} is invalid`);
+      });
     });
   });
 
   describe('leds', () => {
     it('Should set the led positions', () => {
       const instance = setup()
-        .leds('fugazi');
+        .leds([1, 2, 3]);
 
       expect(
         instance.ledPositions
-      ).toEqual('fugazi');
+      ).toEqual([1, 2, 3]);
+    });
+
+    it('Should throw on invalid led positions', () => {
+      const instance = setup();
+
+      expect(() => {
+        instance.leds([1, 2, -1]);
+      }).toThrow('Specified led: -1 is invalid');
+    });
+
+    it('Should throw on non Array passed in', () => {
+      const instance = setup();
+      const invalid = ['foo', 1, undefined, NaN, {foo: 'bar'}];
+
+      invalid.forEach(val => {
+        expect(() => {
+          instance.leds(val);
+        }).toThrow(`Specified leds: ${val} must be an Array`);
+      });
     });
   });
 
   describe('pattern', () => {
-    const instance = setup()
-      .pattern('fizz');
-
     it('Should set the pattern', () => {
+      const instance = setup()
+        .pattern('police');
+
       expect(
         instance.data.pattern
-      ).toEqual('fizz');
+      ).toEqual('police');
     });
 
     it('Should set the command to pattern', () => {
+      const instance = setup()
+        .pattern('police');
+
       expect(
         instance.data.command
       ).toEqual('pattern');
+    });
+
+    it('Should throw on invalid pattern', () => {
+      const instance = setup();
+
+      expect(() => {
+        instance.pattern('foo');
+      }).toThrow('Specified pattern: foo is invalid');
     });
   });
 });

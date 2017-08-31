@@ -49,20 +49,7 @@ Array [
 ]
 `;
 
-exports[`Luxafor exec Should execute the write for only one led position 1`] = `
-Array [
-  Array [
-    1,
-    255,
-    0,
-    255,
-    0,
-    0,
-    0,
-    0,
-  ],
-]
-`;
+exports[`Luxafor exec Should execute the write for only one led position 1`] = `Array []`;
 
 exports[`Luxafor fade Should fade to 0 by default 1`] = `
 Object {
