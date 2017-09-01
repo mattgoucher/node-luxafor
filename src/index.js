@@ -9,11 +9,9 @@ const NIL = 0x00;
  * @returns {bool} True if any values in array are invalid
  */
 function invalidNums(nums) {
-  const invalid = nums.find(num => {
-    return !Number.isInteger(num) || num < 0 || num > 255;
-  });
-
-  return invalid;
+  return nums.some(num =>
+    !Number.isInteger(num) || num < 0 || num > 255
+  );
 }
 
 /**
@@ -92,6 +90,38 @@ export default class Luxafor {
     return timingBytes[command];
   }
 
+  validate() {
+    const { r, g, b, speed, command, repeat, pattern } = this.data;
+
+    if (command && !this.commands[command]) {
+      throw new Error(`Specified command: ${command} is invalid`);
+    }
+
+    if (invalidNums([r || 0, g || 0, b || 0])) {
+      throw new Error(`Specified colors: ${[r, g, b]} are invalid`);
+    }
+
+    if (invalidNums([speed || 0, repeat || 0])) {
+      throw new Error(`Specified timing numbers: ${[speed, repeat]} are invalid`);
+    }
+
+    if (!Array.isArray(this.ledPositions)) {
+      throw new Error(`Specified leds: ${this.ledPositions} must be an Array`);
+    }
+
+    if (pattern && !this.patterns[pattern]) {
+      throw new Error(`Specified pattern: ${pattern} is invalid`);
+    }
+
+    this.ledPositions.forEach(position => {
+      if (!this.positions[position]) {
+        throw new Error(`Specified led: ${position} is invalid`);
+      }
+    });
+
+    return this;
+  }
+
   /**
    * Write to Luxafor
    * @param   {string} [command] Lighting command
@@ -105,6 +135,8 @@ export default class Luxafor {
    * TODO: Should pattern clear out command byte?
    */
   write({command = 'color', position = 'both', r = 0, g = 0, b = 0, pattern, speed, repeat}) {
+    this.validate();
+
     const secondByte = this.patterns[pattern] || this.positions[position];
     const baseBytes = [this.commands[command], secondByte, r, g, b];
     const timingBytes = this.getTiming(command, speed, repeat);
@@ -122,12 +154,16 @@ export default class Luxafor {
    * @returns {object} Instance
    */
   exec() {
-    this.ledPositions.forEach(led =>
-      this.write({
-        ...this.data,
-        position: led
-      })
-    );
+    if (this.ledPositions.length) {
+      this.ledPositions.forEach(led =>
+        this.write({
+          ...this.data,
+          position: led
+        })
+      );
+    } else {
+      this.write({ ...this.data });
+    }
 
     return this.reset();
   }
@@ -138,10 +174,6 @@ export default class Luxafor {
    * @returns {object} Instance
    */
   command(cmd) {
-    if (!this.commands[cmd]) {
-      throw new Error(`Specified command: ${cmd} is invalid`);
-    }
-
     this.data.command = cmd;
     return this;
   }
@@ -154,10 +186,6 @@ export default class Luxafor {
    * @return {object} Instance
    */
   color(r = 0, g = 0, b = 0) {
-    if (invalidNums([...arguments])) {
-      throw new Error(`Specified values: ${[...arguments]} are invalid`);
-    }
-
     Object.assign(this.data, {r, g, b});
     return this;
   }
@@ -171,10 +199,6 @@ export default class Luxafor {
    * @return {object} Instance
    */
   fade(r = 0, g = 0, b = 0, speed = 100) {
-    if (invalidNums([...arguments])) {
-      throw new Error(`Specified values: ${[...arguments]} are invalid`);
-    }
-
     Object.assign(this.data, {r, g, b, speed, command: 'fade'});
     return this;
   }
@@ -199,10 +223,6 @@ export default class Luxafor {
    * @return {object}        Instance
    */
   led(position) {
-    if (!this.positions[position]) {
-      throw new Error(`Specified led: ${position} is invalid`);
-    }
-
     this.ledPositions.push(position);
     return this;
   }
@@ -213,10 +233,6 @@ export default class Luxafor {
    * @return {object} Instance
    */
   leds(positions) {
-    if (!Array.isArray(positions)) {
-      throw new Error(`Specified leds: ${positions} must be an Array`);
-    }
-
     positions.forEach(position => {
       this.led(position);
     });
@@ -230,10 +246,6 @@ export default class Luxafor {
    * @return {object} Instance
    */
   pattern(name) {
-    if (!this.patterns[name]) {
-      throw new Error(`Specified pattern: ${name} is invalid`);
-    }
-
     this.data.pattern = name;
     this.data.command = 'pattern';
     return this;
