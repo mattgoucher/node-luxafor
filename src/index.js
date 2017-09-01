@@ -4,6 +4,17 @@ import colorMap from './colorMap';
 const NIL = 0x00;
 
 /**
+ * Check if array contains valid (0-255) input
+ * @param  {array} nums Array of values
+ * @returns {bool} True if any values in array are invalid
+ */
+function invalidNums(nums) {
+  return nums.some(num =>
+    !Number.isInteger(num) || num < 0 || num > 255
+  );
+}
+
+/**
  * Luxafor
  * @type {object}
  */
@@ -79,6 +90,38 @@ export default class Luxafor {
     return timingBytes[command];
   }
 
+  validate() {
+    const { r, g, b, speed, command, repeat, pattern } = this.data;
+
+    if (command && !this.commands[command]) {
+      throw new Error(`Specified command: ${command} is invalid`);
+    }
+
+    if (invalidNums([r || 0, g || 0, b || 0])) {
+      throw new Error(`Specified colors: ${[r, g, b]} are invalid`);
+    }
+
+    if (invalidNums([speed || 0, repeat || 0])) {
+      throw new Error(`Specified timing numbers: ${[speed, repeat]} are invalid`);
+    }
+
+    if (!Array.isArray(this.ledPositions)) {
+      throw new Error(`Specified leds: ${this.ledPositions} must be an Array`);
+    }
+
+    if (pattern && !this.patterns[pattern]) {
+      throw new Error(`Specified pattern: ${pattern} is invalid`);
+    }
+
+    this.ledPositions.forEach(position => {
+      if (!this.positions[position]) {
+        throw new Error(`Specified led: ${position} is invalid`);
+      }
+    });
+
+    return this;
+  }
+
   /**
    * Write to Luxafor
    * @param   {string} [command] Lighting command
@@ -92,6 +135,8 @@ export default class Luxafor {
    * TODO: Should pattern clear out command byte?
    */
   write({command = 'color', position = 'both', r = 0, g = 0, b = 0, pattern, speed, repeat}) {
+    this.validate();
+
     const secondByte = this.patterns[pattern] || this.positions[position];
     const baseBytes = [this.commands[command], secondByte, r, g, b];
     const timingBytes = this.getTiming(command, speed, repeat);
@@ -109,21 +154,16 @@ export default class Luxafor {
    * @returns {object} Instance
    */
   exec() {
-
-    // Execute a single command
-    if (!this.ledPositions.length) {
-      return this
-        .write(this.data)
-        .reset();
+    if (this.ledPositions.length) {
+      this.ledPositions.forEach(led =>
+        this.write({
+          ...this.data,
+          position: led
+        })
+      );
+    } else {
+      this.write({ ...this.data });
     }
-
-    // Execute for each LED
-    this.ledPositions.forEach(led =>
-      this.write({
-        ...this.data,
-        position: led
-      })
-    );
 
     return this.reset();
   }
@@ -132,7 +172,6 @@ export default class Luxafor {
    * Set Luxafor command mode
    * @param   {string} cmd Lighting command
    * @returns {object} Instance
-   * TODO: Validate commands?
    */
   command(cmd) {
     this.data.command = cmd;
@@ -170,6 +209,10 @@ export default class Luxafor {
    * @return {object} Instance
    */
   colorName(color) {
+    if (!colorMap[color]) {
+      throw new Error(`Specified colorName: ${color} is invalid`);
+    }
+
     Object.assign(this.data, colorMap[color]);
     return this;
   }
@@ -180,7 +223,7 @@ export default class Luxafor {
    * @return {object}        Instance
    */
   led(position) {
-    this.data.position = position;
+    this.ledPositions.push(position);
     return this;
   }
 
@@ -188,10 +231,12 @@ export default class Luxafor {
    * Set multiple Luxafor led positions
    * @param  {array}  positions Specific LED positions 1-6 or named section
    * @return {object} Instance
-   * TODO: Validate LED positions exist?
    */
   leds(positions) {
-    this.ledPositions = positions;
+    positions.forEach(position => {
+      this.led(position);
+    });
+
     return this;
   }
 
