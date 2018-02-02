@@ -132,6 +132,14 @@ Array [
 ]
 `;
 
+exports[`Luxafor hex Should set rgb values by default 1`] = `
+Object {
+  "b": 0,
+  "g": 0,
+  "r": 255,
+}
+`;
+
 exports[`Luxafor write Should turn off the light by default 1`] = `
 Array [
   Array [

@@ -135,6 +135,17 @@ describe('Luxafor', () => {
     });
   });
 
+  describe('hex', () => {
+    it('Should set rgb values by default', () => {
+      const instance = setup()
+        .hex('#FF0000');
+
+      expect(
+        instance.data
+      ).toMatchSnapshot();
+    });
+  });
+
   describe('fade', () => {
     it('Should fade to 0 by default', () => {
       const instance = setup()

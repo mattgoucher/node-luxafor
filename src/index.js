@@ -1,4 +1,5 @@
 import {HID} from 'node-hid';
+import hexToRGB from 'hex-rgb';
 import colorMap from './colorMap';
 
 const NIL = 0x00;
@@ -149,6 +150,11 @@ export default class Luxafor {
   color(r = 0, g = 0, b = 0) {
     Object.assign(this.data, {r, g, b});
     return this;
+  }
+
+  hex(str) {
+    const {red, green, blue} = hexToRGB(str);
+    return this.color(red, green, blue);
   }
 
   /**
