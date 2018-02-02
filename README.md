@@ -28,6 +28,20 @@ MyLight
   .exec()
 ```
 
+**Set Luxafor to blue**
+```js
+MyLight
+  .color(0, 0, 255)
+  .exec()
+```
+
+**Set Luxafor to green**
+```js
+MyLight
+  .hex('#00FF00')
+  .exec()
+```
+
 **Fade Luxafor to Cyan**
 ```js
 MyLight
