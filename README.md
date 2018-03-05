@@ -3,6 +3,7 @@
 > Control your [Luxafor](http://luxafor.com/) light
 
 [![CircleCI](https://circleci.com/gh/mattgoucher/node-luxafor/tree/master.svg?style=shield)](https://circleci.com/gh/mattgoucher/node-luxafor/tree/master)
+[![NPM](https://img.shields.io/npm/dm/node-luxafor.svg)](https://www.npmjs.com/package/node-luxafor)
 [![Coverage Status](https://coveralls.io/repos/github/mattgoucher/node-luxafor/badge.svg)](https://coveralls.io/github/mattgoucher/node-luxafor)
 [![Dependencies](https://david-dm.org/mattgoucher/node-luxafor.svg)](https://www.npmjs.com/package/node-luxafor)
 [![MIT License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/mattgoucher/node-luxafor/edit/master/README.md)
