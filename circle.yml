@@ -4,7 +4,8 @@ machine:
 
 dependencies:
   pre:
-    - sudo apt install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
+    - sudo apt install gcc-4.8 g++-4.8 && export CXX=g++-4.8
+    - sudo apt install libusb-1.0-0 libusb-1.0-0-dev
     - npm install -g npm@5.6.0
 
 test:
